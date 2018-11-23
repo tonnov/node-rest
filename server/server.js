@@ -12,7 +12,7 @@ app.use(bodyParser.json())
 
 app.use(  require('./routes/usuario')  );
 
-
+mongoose.set('useCreateIndex', true);
 mongoose.connect('mongodb://localhost:27017/cafe', {useNewUrlParser: true }, (err, resp) => {
 
     if( err ) throw err;
