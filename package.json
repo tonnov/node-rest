@@ -1,19 +1,26 @@
 {
   "name": "07",
   "version": "1.0.0",
-  "description": "",
+  "description": "Implementacion de un servidor REST",
   "main": "index.js",
   "scripts": {
-    "start": "node server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tonnov/node-rest.git"
   },
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tonnov/node-rest/issues"
+  },
+  "homepage": "https://github.com/tonnov/node-rest#readme",
   "dependencies": {
-    "bcrypt": "^3.0.2",
+    "bcryptjs": "^2.4.3",
     "express": "^4.16.4",
-    "mongoose": "^5.3.12",
+    "mongoose": "^5.3.13",
     "mongoose-unique-validator": "^2.0.2",
-    "save": "^2.3.2"
+    "server": "^1.0.18"
   }
 }
