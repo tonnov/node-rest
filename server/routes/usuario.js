@@ -3,12 +3,46 @@ const express = require('express');
 
 const bcrypt = require('bcryptjs');
 
+const _ = require('underscore');
+
 const Usuario = require('../models/usuario');
 
 const app = express();
 
 app.get('/usuarios', function (req, res) {
-    res.json('Get usuarios Local')
+
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+
+    let limite = Number(req.query.limite || 5);
+
+    let getEstado = {
+        estado: true
+    }
+
+    Usuario.find( getEstado , 'nombre email role estado google' )
+            .skip(desde)
+            .limit(limite)
+            .exec( (err, usuarios) => {
+                
+                if(err) {
+                    return res.status(400).json ({
+                        ok: false,
+                        err
+                    });
+                }
+
+                Usuario.count({  }, (err, conteo) => {
+                    
+                    res.json({
+                        ok: true,
+                        usuarios,
+                        cuantos: conteo
+                    })
+                })
+
+            })
+    //res.json('Get usuarios Local')
   });
   
   app.post('/usuarios', function (req, res) {
@@ -45,7 +79,7 @@ app.get('/usuarios', function (req, res) {
   
   app.put('/usuarios/:id', function (req, res) {
       let id = req.params.id;
-      let body = req.body;
+      let body = _.pick(req.body, ['nombre','email','img','role','estado']);
 
       Usuario.findByIdAndUpdate( id, body, { new: true, runValidators: true }, (err,usuarioDB) => {
 
@@ -66,8 +100,56 @@ app.get('/usuarios', function (req, res) {
 
   });
    
-  app.delete('/usuarios', function (req, res) {
-      res.json('Delete usuarios')
+  app.delete('/usuarios/:id', function (req, res) {
+
+    let id = req.params.id;
+
+    let cambiaEstado = {
+        estado: false
+    }
+
+    Usuario.findByIdAndUpdate( id, cambiaEstado, { new: true }, (err, usuarioDB) => {
+
+        if(err) {
+            return res.status(400).json ({
+                ok: false,
+                err
+            });
+        }
+
+
+          res.json({
+              ok: true,
+              usuario: usuarioDB
+          });
+
+    });
+
+    // Usuario.findByIdAndRemove(id, (err, userDeleted) => {
+
+    //     if(err) {
+    //         return res.status(400).json ({
+    //             ok: false,
+    //             err
+    //         });
+    //     };
+
+    //     if (userDeleted == null) {
+    //         return res.status(400).json ({
+    //             ok: false,
+    //             err: {
+    //                 message: 'Usuario no encontrado'
+    //             }
+    //         });
+    //     }
+
+
+    //     res.json({
+    //         ok: true,
+    //         usuario: userDeleted
+    //     })
+
+    // })
   });
 
 
