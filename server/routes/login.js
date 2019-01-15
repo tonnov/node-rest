@@ -35,16 +35,16 @@ app.post('/login', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 err: {
-                    message: 'Usuario o [contraseña] incorrectos'
+                    message: 'Usuario o [contraseña] incorrectos',
                     //PasswdStored: usuarioDB.password,
-                    //PasswdEntered: bcrypt.hashSync(body.password, 10)
+                    PasswdEntered: bcrypt.hashSync(body.password, 10)
                 }
             });
         }
 
         let token = jwt.sign({
             usuario: usuarioDB
-        },'seed-de-desarrollo', { expiresIn: 60 * 60 * 24 * 30 });
+        }, process.env.SEED , { expiresIn: process.env.CADUCIDAD_TOKEN });
 
         res.json({
             ok: true,
