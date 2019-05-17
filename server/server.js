@@ -22,7 +22,7 @@ console.log(path.resolve(__dirname, '../public') );
 app.use(  require('./routes/index')  );
 
 mongoose.set('useCreateIndex', true);
-mongoose.connect(process.env.URLDB, {useNewUrlParser: true }, (err, resp) => {
+mongoose.connect(process.env.URLDB, {useNewUrlParser: true, useFindAndModify: false }, (err, resp) => {
 
     if( err ) throw err;
 
