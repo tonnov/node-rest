@@ -12,14 +12,16 @@ let Schema = mongoose.Schema;
 let categoriaSchema = new Schema({
     categoria: {
         type: String,
+        unique: true,
         required: [true, 'Nombre de categoria requerido']
     },
     descripcion: {
-        type: String
+        type: String,
+        required: [true, 'Descripcion requerida']
     },
     usuario:{
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Usuario'
     },
     estado: {
         type: Boolean,

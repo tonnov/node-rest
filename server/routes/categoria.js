@@ -19,9 +19,11 @@ const _ = require('underscore');
 
 
 // Muestra todas las categorias
-app.get('/categoria', (req,res) => {
+app.get('/categoria', verificaToken, (req, res) => {
 
-    Categoria.find()
+    Categoria.find({})
+        .sort('descripcion')
+        .populate('usuario', 'nombre email')
         .exec( (err, categorias) => {
 
             if (err) {
@@ -44,24 +46,35 @@ app.get('/categoria', (req,res) => {
 });
 
 // Muestra categoria por ID
-app.get('/categoria/:id', (req, res) => {
+app.get('/categoria/:id', verificaToken, (req, res) => {
     
     let id = req.params.id;
 
     // console.log('Id solicitado ', id);
     
-    Categoria.findById(id, (err, categoria) => {
+    Categoria.findById(id, (err, categoriaDB) => {
         
         if (err) {
+            return res.status(500).json({
+                ok: false,
+                err: {
+                    message: 'El id no existe'
+                }
+            });
+        }
+
+        if (!categoriaDB) {
             return res.status(400).json({
                 ok: false,
-                err
-            });
+                err: {
+                    message: 'El ID no es correcto'
+                }
+            })
         }
         
         res.json({
             ok: true,
-            categoria
+            categoriaDB
         });
         
     });
@@ -120,10 +133,17 @@ app.put('/categoria/:id', [verificaToken, verificaAdminRole], (req, res) => {
     Categoria.findOneAndUpdate( query, body, { new: true, runValidators: true }, (err, categoriaDB) => {
 
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
+        }
+
+        if (!categoriaDB) {
+            return res.status(400).json({
+                ok: false,
+                err
+            })
         }
 
         res.json({
@@ -144,14 +164,24 @@ app.delete('/categoria/:id', [verificaToken, verificaAdminRole], (req, res) => {
     Categoria.findOneAndDelete(query, (err, categoriaDel) =>{
 
         if (err) {
-            return res.status(400).json({
+            return res.status(500).json({
                 ok: false,
                 err
             });
         }
 
+        if (!categoriaDel) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'El id no existe'
+                }
+            });
+        }
+
         res.json({
             ok: true,
+            message: 'Categoria borrada',
             categoriaDel
         });
     });
