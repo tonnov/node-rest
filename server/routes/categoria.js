@@ -126,7 +126,7 @@ app.post('/categoria', [verificaToken, verificaAdminRole], (req, res) => {
 app.put('/categoria/:id', [verificaToken, verificaAdminRole], (req, res) => {
 
     let id = req.params.id;
-    let body = _.pick(req.body, ['categoria','descripcion']);
+    let body = _.pick(req.body, ['categoria']);
 
     let query = { _id: id };
 
