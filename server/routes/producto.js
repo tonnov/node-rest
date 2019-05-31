@@ -9,11 +9,18 @@ let Producto =  require('../models/producto');
 
 // =====================================
 // Obtener productos
-app.get('/producto', ( req, res ) => {
+app.get('/producto', verificaToken, ( req, res ) => {
 
     let estado = { disponible: true };
+    let desde = req.query.desde || 0;
+    desde =  Number(desde);
+
+    //console.log(req.query);
+    
 
     Producto.find(estado)
+    .skip(desde)
+    .limit(5)
     .populate('categoria','categoria')
     .populate('usuario','nombre')
     .exec( (err, productos) => {
@@ -51,11 +58,14 @@ app.get('/producto', ( req, res ) => {
 
 // =====================================
 // Obtener producto por Id
-app.get('/producto/:id', ( req, res ) => {
+app.get('/producto/:id', verificaToken, ( req, res ) => {
 
     let id = req.params.id;
     // console.log(id);
-    Producto.findById(id, (err, productoDB) => {
+    Producto.findById(id)
+    .populate('usuario','nombre email')
+    .populate('categoria','categoria')
+    .exec((err, productoDB)  => {
 
         if (err) {
             return res.status(500).json({
@@ -79,9 +89,39 @@ app.get('/producto/:id', ( req, res ) => {
 
         res.json({
             ok: true,
-            productoDB
+            producto: productoDB
         });
     });
+});
+
+
+// =====================================
+// Buscar producto
+app.get('/producto/buscar/:termino', verificaToken, ( req, res ) => {
+
+    let termino = req.params.termino;
+
+    let regexp = new RegExp(termino, 'i');
+
+    Producto.find({nombre: regexp})
+        .populate('categoria', 'nombre')
+        .exec((err, productoDB ) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err: {
+                        message: 'Error de base de datos',
+                        err
+                    }
+                });
+            }
+
+            res.json({
+                ok: true,
+                producto: productoDB
+            });
+        });
 });
 
 
@@ -120,9 +160,9 @@ app.post('/producto', verificaToken, ( req, res) => {
             })
         }
 
-        res.json({
+        res.status(201).json({
             ok: true,
-            productoDB
+            producto: productoDB
         });
 
     })
@@ -132,7 +172,7 @@ app.post('/producto', verificaToken, ( req, res) => {
 
 // =====================================
 // Actualizar producto por Id
-app.put('/producto/:id', ( req, res ) => {
+app.put('/producto/:id', verificaToken, ( req, res ) => {
 
     let id = req.params.id;
     let prod = req.body;
@@ -167,7 +207,7 @@ app.put('/producto/:id', ( req, res ) => {
         res.json({
             ok: true,
             message: 'Se ha actualizado correctamente',
-            productoDB
+            producto: productoDB
         });
     });
 
@@ -176,7 +216,7 @@ app.put('/producto/:id', ( req, res ) => {
 
 // =====================================
 // Baja de producto (cambiar estado a false)
-app.delete('/producto/:id', ( req, res ) => {
+app.delete('/producto/:id', verificaToken, ( req, res ) => {
 
     let id = req.params.id;
 
