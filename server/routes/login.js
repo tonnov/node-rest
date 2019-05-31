@@ -13,7 +13,7 @@ app.post('/login', (req, res) => {
 
     let body = req.body;
 
-    //console.log(body);
+    //console.log(body,bcrypt.hashSync(body.password, 10));
 
     Usuario.findOne({ email: body.email }, (err, usuarioDB) => {
 
@@ -32,6 +32,7 @@ app.post('/login', (req, res) => {
                 }
             });
         }
+        
 
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({

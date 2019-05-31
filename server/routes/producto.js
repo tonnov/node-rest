@@ -11,7 +11,9 @@ let Producto =  require('../models/producto');
 // Obtener productos
 app.get('/producto', ( req, res ) => {
 
-    Producto.find({})
+    let estado = { disponible: true };
+
+    Producto.find(estado)
     .populate('categoria','categoria')
     .populate('usuario','nombre')
     .exec( (err, productos) => {
@@ -34,7 +36,7 @@ app.get('/producto', ( req, res ) => {
             });
         }
 
-        Producto.countDocuments( { disponible: true }, (err, disp) => {
+        Producto.countDocuments( estado, (err, disp) => {
             res.json({
                 ok: true,
                 disponible: disp,
@@ -51,6 +53,35 @@ app.get('/producto', ( req, res ) => {
 // Obtener producto por Id
 app.get('/producto/:id', ( req, res ) => {
 
+    let id = req.params.id;
+    // console.log(id);
+    Producto.findById(id, (err, productoDB) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                err: {
+                    message: 'Error en la consulta',
+                    err
+                }
+            });
+        }
+
+        if (!productoDB) {
+            return res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Producto no encontrado',
+                    err
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            productoDB
+        });
+    });
 });
 
 
@@ -103,12 +134,78 @@ app.post('/producto', verificaToken, ( req, res) => {
 // Actualizar producto por Id
 app.put('/producto/:id', ( req, res ) => {
 
+    let id = req.params.id;
+    let prod = req.body;
+
+    let nprod = {
+        nombre: prod.nombre,
+        precioUni: prod.precioUni,
+        descripcion: prod.descripcion,
+        categoria: prod.categoria
+    }
+
+    Producto.findByIdAndUpdate(id, nprod, { new: true, runValidators: true }, (err, productoDB) => {
+
+        if (err) {
+            res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Error de consulta'
+                }
+            });
+        }
+
+        if (!productoDB) {
+            res.status(500).json({
+                ok: false,
+                err: {
+                    message: 'No se ha encontrado el producto'
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            message: 'Se ha actualizado correctamente',
+            productoDB
+        });
+    });
+
 });
 
 
 // =====================================
 // Baja de producto (cambiar estado a false)
 app.delete('/producto/:id', ( req, res ) => {
+
+    let id = req.params.id;
+
+    Producto.findByIdAndUpdate(id, { disponible: false }, {new: true}, (err, productoDB) => {
+
+        if (err) {
+            res.status(400).json({
+                ok: false,
+                err: {
+                    message: 'Error de consulta'
+                }
+            });
+        }
+
+        if (!productoDB) {
+            res.status(500).json({
+                ok: false,
+                err: {
+                    message: 'No se ha encontrado el producto'
+                }
+            });
+        }
+
+        res.json({
+            ok: true,
+            message: 'El producto se dio de baja correctamente',
+            productoDB
+        });
+    });
 
 })
 
