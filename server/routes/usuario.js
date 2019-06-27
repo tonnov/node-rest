@@ -62,6 +62,7 @@ app.get('/usuarios', verificaToken, (req, res) => {
         password: bcrypt.hashSync(body.password, 10),
         role: body.role,
         estado: body.estado,
+        img: body.img,
         google: body.google
       });
 
