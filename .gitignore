@@ -4,6 +4,10 @@ node_modules/
 
 *.jpg
 
-server/uploads/productos/
+server/uploads/*.jpeg
 
-server/uploads/usuarios/
+server/uploads/*.jpg
+
+server/uploads/productos/*.jpg
+
+server/uploads/usuarios/*.jpg
