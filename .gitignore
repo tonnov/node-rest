@@ -3,3 +3,7 @@ node_modules/
 .DS_Store
 
 *.jpg
+
+server/uploads/productos/
+
+server/uploads/usuarios/
