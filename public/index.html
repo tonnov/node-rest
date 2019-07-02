@@ -5,17 +5,20 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
+    
+    <!-- <img src="http://192.168.3.10:3000/imagen/usuarios/5bfee0e4d2f1eb1114e975d2-433.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvIjp7InJvbGUiOiJBRE1JTl9ST0xFIiwiZXN0YWRvIjpmYWxzZSwiZ29vZ2xlIjp0cnVlLCJfaWQiOiI1YmZlZTBlNGQyZjFlYjExMTRlOTc1ZDIiLCJub21icmUiOiJUZXN0IDEiLCJlbWFpbCI6InRlc3QxQGdtYWlsLmNvbSIsImltZyI6IjViZmVlMGU0ZDJmMWViMTExNGU5NzVkMi00MzMuanBnIiwiX192IjowfSwiaWF0IjoxNTYyMDA4NjE1LCJleHAiOjE1NjIxODE0MTV9.yRFlOntuv5_l7J3XOQN77Mtq6cxoGUn-VpGR4Z7rma8" alt=""> -->
+
     <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     <hr>
   <a href="#" onclick="signOut();">Sign out</a>
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
-</script>
+  <script>
+    function signOut() {
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    }
+  </script>
 
     <script>
       function onSignIn(googleUser) {

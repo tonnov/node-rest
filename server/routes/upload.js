@@ -10,7 +10,7 @@ const Producto = require('../models/producto');
 const fs = require('fs');
 const path = require('path');
 
-app.use(fileUpload());
+app.use( fileUpload({ useTempFiles: true }) );
 
 app.put('/upload/:tipo/:id', (req, res) => {
 
@@ -65,12 +65,19 @@ app.put('/upload/:tipo/:id', (req, res) => {
 
     let nombreArchivo = `${ id }-${ new Date().getMilliseconds() }.${ extension }`;
 
+    //let mypath = path.resolve(__dirname, `../../uploads/${ tipo }/${ nombreArchivo }`);
+
+    //console.log(mypath);
+
     archivo.mv(`uploads/${ tipo }/${ nombreArchivo }`, (err, req) => {
 
         if (err) {
             return res.status(500).json({
                 ok: false,
-                err
+                err: {
+                    message: 'Error al mover',
+                    err
+                }
             });
         }
 
@@ -103,7 +110,9 @@ function imagenUsuario(id, res, nombreArchivo){
 
             return res.status(500).json({
                 ok: false,
-                err
+                err: {
+                    message: 'Error'
+                }
             });
         }
 

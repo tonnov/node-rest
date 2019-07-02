@@ -3,11 +3,4 @@ node_modules/
 .DS_Store
 
 *.jpg
-
-server/uploads/*.jpeg
-
-server/uploads/*.jpg
-
-server/uploads/productos/*.jpg
-
-server/uploads/usuarios/*.jpg
+*.jpeg
