@@ -126,8 +126,13 @@ function imagenUsuario(id, res, nombreArchivo){
                 }
             });
         }
+        //console.log(usuarioDB);
+        
+        //console.log(usuarioDB.hasOwnProperty('img'));
 
-        if (usuarioDB.img.length > 0) {
+        //console.log('img' in usuarioDB);
+        
+        if (('img' in usuarioDB) || (usuarioDB.img.length > 0)) {
 
             borraImagen(usuarioDB.img, 'usuarios');
 

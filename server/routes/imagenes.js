@@ -13,7 +13,7 @@ app.get('/imagen/:tipo/:img', verificaTokenImg, (req, res) =>{
     let tipo = req.params.tipo;
     let img = req.params.img;
 
-    //(console.log(tipo,img);
+    //console.log(tipo,img);
 
 
     let pathImagen = path.resolve(__dirname, `../../uploads/${ tipo }/${ img }`);
