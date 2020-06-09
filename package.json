@@ -20,11 +20,11 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.17.1",
-    "express-fileupload": "^1.1.4",
+    "express-fileupload": "^1.1.6",
     "jsonwebtoken": "^8.4.0",
-    "mongoose": "^5.3.13",
+    "mongoose": "^5.9.15",
     "mongoose-unique-validator": "^2.0.2",
-    "server": "^1.0.19",
-    "underscore": "^1.9.1"
+    "server": "^1.0.27",
+    "underscore": "^1.10.2"
   }
 }
